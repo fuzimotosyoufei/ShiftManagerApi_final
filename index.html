@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シフト希望提出</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 10px;
+            background-color: hsl(0, 0%, 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            /* スマホで見るときは画面いっぱいに広がりそれ以外のpcなら600以上広がらない */
+            /* なにも指定しないと勝手にcontainaer文サイズが広がる */
+            margin: 0 auto;
+            /* 余白の均等 */
+            background: white;
+            padding: 15px;
+            /* これで中に白を作っている */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+
+        #user-info {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #06C755;
+        }
+
+        #calendar {
+            margin-bottom: 20px;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #06C755;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .palette-container {
+            /* 枠の大きさはあえて書かない中のボタンの要素で自動的に大きさが変わるから */
+            border: 1px solid #e0e0e0;
+            background-color: #fcfcfc;
+            padding: 12px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+        }
+
+        .stamp-btn {
+            padding: 8px 30px;
+            /* ボタンの押しやすい大きさ */
+            font-size: 14px;
+            /* font-weight: bold; */
+            border: 1px solid #ccc;
+            background-color: white;
+            /* cursor: pointer; */
+        }
+
+        .stamp-btn.UN {
+            background-color: rgb(131, 252, 176);
+        }
+
+        #Text-message {
+
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #555;
+
+            width: 100%;
+            /* 最初から横幅を画面いっぱいに広げる */
+            height: 120px;
+            box-sizing: border-box;
+            /* padding（10px）のせいで右側にはみ出すのを防ぐ魔法 */
+        }
+
+        .event-name {
+            width: 60%;
+            font-size: 18px;
+            color: #ca0202;
+        }
+
+        .radio-sample-container {
+            display: flex;
+            /* ボタンを横一列に綺麗に並べる魔法 */
+            width: 20%;
+            gap: 30px;
+            /* ボタンとボタンの間のスキマ */
+            margin-top: 10px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+
+        .radio-label {
+            font-size: 14px;
+            color: #333;
+            cursor: default;
+            /* 表示だけなので、マウスを乗せても矢印のままにする */
+        }
+
+        /* ここ後で自力で */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            /* 背景を半透明の黒にする */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* 最前面に表示 */
+        }
+
+        /* モーダルの白枠部分 */
+        .modal-content {
+            background-color: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            width: 85%;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="user-info">読み込み中...</div>
+        <h2>📅 シフト希望休申請</h2>
+        <div class="palette-container">
+            <button class="stamp-btn" data-mode="日勤" onclick="selectstamp('日勤')">日勤</button>
+            <button class="stamp-btn " data-mode="早番" onclick="selectstamp('早番')">早番</button>
+            <button class="stamp-btn" data-mode="遅番" onclick="selectstamp('遅番')">遅番</button>
+            <button class="stamp-btn " data-mode="夜勤" onclick="selectstamp('夜勤')">夜勤</button>
+            <button class="stamp-btn UN" data-mode="休み" onclick="selectstamp('休み')">休み</button>
+
+        </div>
+        <div id="calendar"></div>
+        <h2>備考欄</h2>
+        <textarea type="text" id="Text-message" placeholder="ここに文字を入力"></textarea>
+
+
+        <h2>行事</h2>
+        <div id="event_create">
+
+
+        </div>
+        <!-- <div class="palette-container">
+            <h2>15日は職員会議です。参加の意思を確認します。</h2>
+            <div class="radio-sample-container">
+                <label class="radio-label">
+                    <input type="radio" checked disabled> はい
+                </label>
+
+                <label class="radio-label">
+                    <input type="radio" disabled> いいえ
+                </label>
+            </div>
+        </div>
+
+        <div class="palette-container">
+            <h2>17日は交流会です。参加の意思を確認します。</h2>
+            <div class="radio-sample-container">
+                <label class="radio-label">
+                    <input type="radio" checked disabled> はい
+                </label>
+
+                <label class="radio-label">
+                    <input type="radio" disabled> いいえ
+                </label>
+            </div>
+        </div> -->
+
+    </div>
+
+    <div id="register-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <label>新規登録</label>
+            <form id="modal-form">
+                <div class="form-grop">
+                    <label>ライン登録番号</label>
+                    <input type="text" id="modal-line-name">
+                </div>
+                <div class="form-grop">
+                    <label>氏名</label>
+                    <input type="text" id="modal-staff-name">
+                </div>
+                <!-- <div class="form-grop">
+                    <label>区分</label>
+                    <select name="employmentType" id="modal-employment-type">
+                        <option value="" disabled selected>選択してください</option>
+                        <option value="apple">正社員</option>
+                        <option value="banana">準社員</option>
+                        <option value="orange">パート</option>
+                    </select>
+                </div>
+                <div class="form-grop">
+                    <label>じょぶ</label>
+                    <select name="employmentJobType" id="modal-employment-Jobtype">
+
+                    </select>
+                </div> -->
+                <div class="modal-buttons">
+                    <button type="button" onclick="submitRegistration()">登録する</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- type="text"を使うためには枠自体に文字を打ち込める枠だと知らせなくてはいけないだからinputやtextareaにしなくてはいけないtextareaは改行ができる -->
+    <!-- <div id="selected-list"
+            style="margin-bottom: 20px; padding: 10px; background: #f9f9f9; border-radius: 5px; font-size: 14px; color: #555;">
+            選択中の日付： なし</div> -->
+
+    <button class="btn-submit" onclick="submitData()">この内容で申請する</button>
+    </div>
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script>
+        let selectedDates = [];//リストはあらかじめ何を入れるかをしてしなくてもいいいざ入れるときにキーと一緒に項目を入れることでリストの中に項目と要素をセットで保存できる
+        //入れる要素が一つの場合datesで取り出せるためpushの時に特に何も考えなくていい
+        let lineid = "";
+        let userName = "ゲストユーザー";
+        let calendar;
+        let selectstamps = "休み";
+        let event_ans = [];
+        let periods_id;
+        // let shift_reqs_id = null;
+        const calendarEl = document.getElementById('calendar');//calendarElにcalendarの場所を代入する理由はcalendarElをこの先使う可能性があるからgetElementByIdはその場所を代入する
+
+        // ここに内部の更新処理を書く
+        //休みか、遅番、早番で何が押されたかの判定----------------------------------------------------------------------------------------------------------------------------------------
+        function selectstamp(mode) {
+            selectstamps = mode;
+
+            document.querySelectorAll('.stamp-btn').forEach(btn => {
+                //classList句を使うことでCSSの適応などができるようになる 
+                btn.classList.remove('UN');
+            })
+            //event.targetで何が押されたかを指定できるonclickでどこの部分でボタンを押されているかを事前に聞いているから使える
+            event.target.classList.add('UN');
+
+        }
+
+
+        //ラインのログイン 名前とIDの取得処理-----------------------------------------------------------------------------------------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', function () {//documentはHTMLのテキストボックスとかのコンテンツに関わるのに使うaddEventListenerは全てHTMLの読み込みが終わったら実行する
+            // ⚠️ YOUR_LIFF_ID_HERE をご自身の LIFF ID に書き換えてください
+            liff.init({ liffId: "2010276207-ArHS36jI" })//ログイン判定パスワードの代わりにID もうすこしべんきょうしたいいいいいいいいいいいいいいいい
+                .then(() => {//thenこれは.の前の処理が終わったら処理を実行するやつifの場合実行スピードが追い付かなく.thenにして終わったら次これをやっての処理が適している
+                    if (!liff.isLoggedIn()) {
+                        liff.login();
+                    }//liffはラインだけの特殊な奴loginは一度ログインの画面に行きもう一度ログインしてから戻ってくるような処理
+                    else {
+                        liff.getProfile().then(profile => {
+                            userName = profile.displayName;
+                            lineid = profile.userId;
+                            document.getElementById('user-info').innerText = "こんにちは、" + userName + " さん";
+
+                            checkUserid(lineid, userName);
+                        });
+                    }
+                    //ここらへんで多分入れるらいんのID
+                })
+                .catch((err) => {
+                    document.getElementById('user-info').innerText = "※ブラウザモードで実行中2（LINE外）";
+                });
+        });
+        //今配信しているカレンダーを選別し表示する処理-----------------------------------------------------------------------------------------------------------------------------------------      
+
+        function checkUserid(lineid, name) {
+            fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift/CheckUserid?GetId=${lineid}&GetName=${name}`, {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('データの取得に失敗しました');
+                    return response.json(); // 💡 C#から届いたJSONをJavaScriptで使えるように変換少し勉強がいる
+                })
+                .then(data => {
+                    if (!data.message) {
+                        alert("失敗しました");
+                        document.getElementById('modal-line-name').value = lineid;
+                        // loadJobOptions();
+                        const staff = document.getElementById('modal-staff-name');
+
+                        // display を 'flex' に変更して表示
+                        document.getElementById('register-modal').style.display = 'flex';
+                    } else {
+
+                        CalendarData(lineid);
+                    }
+                });
+        }
+        // function loadJobOptions() {
+        //     const selectEl = document.querySelector('#modal-employment-Jobtype');
+
+        //     // 職種マスターを取得するAPI（※API名はご自身の環境に合わせてください）
+        //     fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift/GetJobList`, {
+
+        //         headers: { 'ngrok-skip-browser-warning': 'true' }
+        //     })
+        //         .then(response => response.json())
+        //         .then(jobs => {
+        //             selectEl.innerHTML = '<option value="" disabled selected>選択してください</option>';
+        //             jobs.forEach(job => {
+        //                 const option = document.createElement('option');
+        //                 option.value = job.id;
+        //                 option.textContent = job.name;
+        //                 selectEl.appendChild(option);
+        //             });
+        //         })
+        //         .catch(err => console.error("職種データの取得エラー:", err));
+        // }
+
+        function submitRegistration() {
+            const staffInput = document.getElementById('modal-staff-name');
+            const lineIdInput = document.getElementById('modal-line-name');
+            // const employmentType = document.querySelector('#modal-employment-type').value;
+            // const selectEl = document.querySelector('#modal-employment-Jobtype').value;
+            const staffName = staffInput.value.trim();
+            const lineId = lineIdInput.value;
+            //   / 選択されていない項目がないかチェック
+            if (!lineId || !staffName) {
+                alert('すべての項目を入力・選択してください。');
+                return;
+            } else {
+                alert("OK許可が出るまで待ってね");
+                fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift/staff_apply?line_id=${lineId}&staffName=${staffName}`, {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true'
+                    }
+
+                })
+                    .then(async response => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            // C# 側の BadRequest(new { message = "..." }) のメッセージをそのまま Error に投げる
+                            throw new Error(data.message || '処理に失敗しました');
+                        }
+                        return data; // 200 OK の場合はここが次の .then へ渡る
+                    })
+                    .then(data => {
+                        // 200 OK のとき（「申請を受け付けました」等）
+                        // alert(data.message);
+                        document.getElementById('register-modal').style.display = 'none';
+                    })
+                    .catch(error => {
+                        // 400 エラーのとき（「現在管理者による承認待ち（申請中）です。」等）
+                        alert(error.message);
+                    });
+
+            }
+        }
+
+
+        function CalendarData(lineid) {
+
+            fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift/calendar', {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('データの取得に失敗しました');
+                    return response.json(); // 💡 C#から届いたJSONをJavaScriptで使えるように変換少し勉強がいる
+
+                })
+                .then(data => {
+
+                    console.log("C#から届いた生データはこれだ！:", data);
+                    const year = data.year;
+                    const month = data.month;
+                    periods_id = data.id;
+
+                    const prevLastDateObj = new Date(year, month - 1, 0);
+                    const prevYear = prevLastDateObj.getFullYear();
+                    const prevMonthStr = String(prevLastDateObj.getMonth() + 1).padStart(2, '0');
+                    const prevDayStr = String(prevLastDateObj.getDate()).padStart(2, '0');//前の月の最終日の計算
+
+                    const startMonthStr = String(month).padStart(2, '0');
+                    startDateStr = `${year}-${startMonthStr}-01`;
+                    const lastDay = new Date(year, month, 1).getDate();//多分5月のはじめを計算している
+                    // alert(lastDay);
+                    const endDayStr = String(lastDay).padStart(2, '0');
+                    endDateStr = `${year}-${startMonthStr}-${lastDay}`;
+
+                    initCalendar(startDateStr, endDateStr);
+
+                    //すでにその月のカレンダーに入力していてそれを表示する処理-----------------------------------------------------------------------------------------------------------------------------------------    
+                    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift/staffid?line_id=${lineid}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })//？から後が送るデータ送るデータは受け取る側の変数名と同じにすることでデータを渡すことができるline_idからstaffidがあるかの処理 今はカレンダー送信を押したときにこの処理をしているため二重に処理を行っている初めにこの処理をしたら大丈夫になると思う
+
+                        .then(response => { if (!response.ok) throw new Error('データの取得に失敗しました'); return response.json(); })
+                        .then(staff_id => {
+                            if (!staff_id || staff_id === null || staff_id === undefined) {
+                                console.log(staff_id)
+                                console.log("スタッフがまだ登録されてないよ")
+                                Event(null);
+                            } else {
+                                const actualStaffId = staff_id.staffId;
+                                console.log("スタッフがすでにあるかのデータだよ", staff_id);
+                                // alert(staff_id);
+
+                                fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift/shift_reqs?staff_id=${staff_id}&periods_id=${periods_id}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+                                    .then(response => { if (!response.ok) throw new Error('reqsのid取得に失敗しました'); return response.json(); })
+                                    .then(data => {
+                                        if (data === null) {
+                                            console.log("まだ作ってないよ")
+                                            Event(null);
+                                            return;
+                                        }
+                                        shift_reqs_id = data.id;
+                                        console.log("もうその月に作ってあるよ", shift_reqs_id);
+                                        document.getElementById("Text-message").value = data.memo || "";
+                                        Event(shift_reqs_id);
+
+                                        fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift/shift_dates?shift_reqs_id=${shift_reqs_id}&prev_date=${prevDayStr}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+                                            .then(response => { if (!response.ok) throw new Error('日付の取得に失敗しました'); return response.json(); })
+                                            .then(dates => {
+                                                console.log("日付", dates);
+                                                dates.forEach(datesfor => {
+                                                    selectedDates.push({
+                                                        date: datesfor.date,
+                                                        mode: datesfor.mode,
+
+                                                    });
+                                                    HistoryDay(calendar, datesfor.date, datesfor.mode);//メモがまだだよ
+                                                });
+
+
+                                            })
+
+                                    })
+                            }
+
+                        })
+
+
+                })
+                .catch(error => {
+                    console.error('エラー:', error);
+                })
+
+        }
+
+        function Event(shift_reqs_id) {
+            console.log("データこれ", shift_reqs_id);
+
+            // ★ shift_reqs_id が null、undefined、"null"、または数値でない場合は fetch をスキップする
+            if (!shift_reqs_id || shift_reqs_id === "null") {
+                console.warn("shift_reqs_id が未設定のため、event取得処理をスキップしました");
+                return;
+            }
+
+            fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift/event?shift_reqs_id=${shift_reqs_id}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+                .then(response => { if (!response.ok) throw new Error('データの取得に失敗しました'); return response.json(); })
+                .then(data => {
+                    console.log("データこれ", data);
+                    initEvent(data);
+                })
+                .catch(error => {
+                    console.error('エラー', error);
+                });
+        }
+
+        //カレンダーの履歴の色を変える処理作成処理----------------------------------------------------------------------------------------------------------------------------------------
+        function HistoryDay(calendar, date, mode) {
+            const dayEl = calendarEl.querySelector(`[data-date="${date}"]`);
+            updateCellColor(dayEl, mode);
+        }
+        //カレンダーの作成処理----------------------------------------------------------------------------------------------------------------------------------------
+        function initCalendar(start, end) {
+
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',//何週間か月のカレンダーにするかを決めれる
+                locale: 'ja',//言語
+
+                headerToolbar: {
+                    left: '',
+                    center: 'title',
+                    right: ''
+                },
+
+                validRange: {
+                    start: start,
+                    end: end
+                },
+                contentHeight: 'auto',
+                selectable: true,//カレンダーのマス目をたプできるようにする
+
+
+                //押された日付を保存する、削除、変更する処理----------------------------------------------------------------------------------------------------------------------------------------
+                dateClick: function (info) {
+
+                    const clickedDate = info.dateStr;//日付をclickeDateに入れている
+
+                    console.log("データ", info.dateStr)
+                    console.log("データ", typeof info)
+                    const existsindex = selectedDates.findIndex(item =>//これには番号が入っている
+                        item.date == clickedDate
+
+                    );
+                    // if (前日と翌日の日を取得する処理) {
+
+                    // } else {
+
+
+                    if (existsindex !== -1) {//selectedDatesは選んでいる日付を一時的に入れる配列 includesはカレンダーで選ばれているかを判定 配列の中に今カレンダーでクリックされている日付があるかを判定して言う
+                        if (selectedDates[existsindex].mode == selectstamps) {
+                            selectedDates.splice(existsindex, 1)//リストの番号とそこから何個消すでプログラムを書いている
+                            info.dayEl.style.backgroundColor = '#ffffff';
+
+                            const label = info.dayEl.querySelector('.shift-stamp-label');
+                            if (label) {
+                                label.remove();
+                            }
+                        } else {
+                            selectedDates.splice(existsindex, 1); // まず古いデータを消す
+                            selectedDates.push({
+                                date: clickedDate,
+                                mode: selectstamps
+                            });
+                            updateCellColor(info.dayEl, selectstamps);
+
+                        }
+                    } else {
+                        selectedDates.push({
+                            date: clickedDate,
+                            mode: selectstamps
+                        });//何かが足りない
+                        updateCellColor(info.dayEl, selectstamps);
+                    }
+
+                }
+                // }
+            });
+
+            // refreshCalendarEvents();
+            calendar.render();//これ最後に表示する
+        };
+        function updateCellColor(element, stamp) {
+            if (stamp === "休み") {
+                element.style.backgroundColor = '#ff4d4d';
+            } else if (stamp === "日勤") {
+                element.style.backgroundColor = '#3498db';
+            } else if (stamp === "早番") {
+                element.style.backgroundColor = '#2ecc71';
+            } else if (stamp === "夜勤") {
+                element.style.backgroundColor = '#9b59b6';
+            } else {
+                element.style.backgroundColor = '#b9ce31';
+            }
+
+            let label = element.querySelector('.shift-stamp-label');
+
+            if (!label) {
+                // なければ作成して追加
+                label = document.createElement('div');
+                label.className = 'shift-stamp-label';
+                // 見やすさのためのスタイリング
+                label.style.color = '#ffffff'; // 白文字
+                label.style.fontWeight = 'bold';
+                label.style.fontSize = '12px';
+                label.style.textAlign = 'center';
+                label.style.marginTop = '4px';
+                label.style.pointerEvents = 'none'; // クリックイベントを通過させる
+
+                // 日付セルのフレーム内に追加（FullCalendarのセル構成に合わせる）
+                const dayFrame = element.querySelector('.fc-daygrid-day-frame') || element;
+                dayFrame.appendChild(label);
+            }
+
+            // テキストの設定
+            label.textContent = stamp;
+        }
+
+        // イベント欄の作成----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+        function initEvent(eventList) {//イベント欄の作成
+            const event = document.getElementById('event_create');//おおもとの作成
+            event.innerHTML = '';//一度中を空にする
+            event_ans = [];
+            eventList.forEach(eventl => {
+                event_ans.push({
+                    id: eventl.eventId,
+                    answer: eventl.answer
+                });
+                var OKchecked = "";
+                var NOchecked = "";
+                console.log("できた１")
+                if (eventl.answer == true) {
+                    OKchecked = 'checked';
+                } else if (eventl.answer == false) {
+                    NOchecked = 'checked';
+                }
+                console.log("できた２")
+                //名前が同じradioがあることでそれしか選べないみたいになる
+                const html = `
+                        <div class="pelette-container>
+                            <div class="event-name">${eventl.eventName}</div>
+                            <div class ="radio-sample-container">
+                                <label class="radio-label"> 
+                                    <input type="radio" name= ${eventl.eventId} onchange="CheckEvent(${eventl.eventId}, true)"  ${OKchecked}> OK
+                                </label>
+                                <label class="radio-label"> 
+                                    <input type="radio" name= ${eventl.eventId} onchange="CheckEvent(${eventl.eventId}, false)" ${NOchecked}> NO
+                                </label>
+                            </div>
+                        </div>
+                    `;//HTMLのように各
+                console.log(html)
+                event.insertAdjacentHTML('beforeend', html);//おおもとに追加beforeendで後ろから順に追加htmlでその中を
+            });
+        }
+
+        function CheckEvent(event_id, Check) {
+            const target = event_ans.find(item => item.id === event_id);
+            if (target) {
+                target.answer = Check;
+                console.log("回答", event_ans);
+            }
+        }
+        // アンサーにあるいべんといidと同じやつにいれshift_reqsを作った後にreqsidを使い誰が答えたかの記録を行いanswer Booleanにfalseかtrueを入れる
+        // function initEvent(eventList) {//イベント欄の作成
+        //     const event = document.getElementById('event_create');
+
+        //     eventList.forEach(eventl => {
+        //         const event_frame = document.createElement('div');//イベントエリアの枠組み作成
+        //         event_frame.classList.add('palette-container');
+        //         const event_name = document.createElement('event-name');//イベントエリアのイベント名作成
+        //         // event_name.classList.add('event-name');
+        //         event_name.textContent = eventl.eventName;
+        //         const event_answer = document.createElement('div');//イベントエリアの解答欄を作成
+        //         event_answer.classList.add('radio-sample-container');
+        //         const event_label = document.createElement('label');//解答欄の枠組み
+        //         event_label.classList.add("radio-label");
+        //         const event_input = document.createElement('input');//解答欄のOKの部分を作成
+        //         event_input.type = 'radio';
+
+        //         event_frame.appendChild(event_name);//イベント名
+        //         event_label.appendChild(event_input);//OKの解答欄
+        //         event_label.append("OK");
+        //         event_answer.appendChild(event_label);//イベントの解答欄をまとめるやつ
+        //         event_frame.appendChild(event_answer);//イベントの解答欄
+
+        //         event.appendChild(event_frame);//全体
+
+        //     })
+
+
+
+
+        async function submitData() {
+            // 1. C# (ShiftSubmission) に完全に合わせた送信用オブジェクトを作成
+            const sendData = {
+                Name: userName,
+                Memo: bikouText,
+                id: lineid,
+                Year: parseInt(calYear, 10),
+                Month: parseInt(calMonth, 10),
+                Dates: sortedDates,  // [{ Date: "...", Mode: "..." }]
+                Answer: event_ans    // [{ Id: 1, Answer: true }]
+            };
+
+            console.log("=== 送信データ (JSON Payload) ===");
+            console.log(JSON.stringify(sendData, null, 2));
+
+            try {
+                // 2. APIへの送信
+                const response = await fetch("https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "ngrok-skip-browser-warning": "true" // ngrokの警告画面回避
+                    },
+                    body: JSON.stringify(sendData)
+                });
+
+                console.log(`ステータスコード: ${response.status} ${response.statusText}`);
+
+                // レスポンスのテキストを取得
+                const responseText = await response.text();
+                console.log("=== サーバーからの生の返答 ===");
+                console.log(responseText);
+
+                // 3. エラー時の処理 (400 Bad Request 等)
+                if (!response.ok) {
+                    try {
+                        const errorJson = JSON.parse(responseText);
+                        console.error("=== バリデーションエラー詳細 ===", errorJson.errors || errorJson);
+                        alert(`送信エラー (${response.status}):\n` + JSON.stringify(errorJson.errors || errorJson, null, 2));
+                    } catch (e) {
+                        alert(`エラーが発生しました (ステータス: ${response.status}):\n${responseText}`);
+                    }
+                    return;
+                }
+
+                // 4. 成功時の処理
+                let resultData = {};
+                if (responseText) {
+                    resultData = JSON.parse(responseText);
+                }
+
+                alert(resultData.message || "提出が完了しました。");
+
+                // 5. LINEトーク画面へのメッセージ送信＆画面閉じ処理
+                if (typeof liff !== "undefined" && liff.isInClient()) {
+                    const formattedDatesForLine = sortedDates
+                        .map(item => `${item.date || item.Date} (${item.mode || item.Mode})`)
+                        .join("\n");
+
+                    await liff.sendMessages([{
+                        type: 'text',
+                        text: `【シフト希望】\n氏名: ${userName}\n${formattedDatesForLine}\n上記で申請します。`
+                    }]);
+
+                    liff.closeWindow();
+                }
+
+            } catch (error) {
+                console.error("=== 通信・処理エラー ===", error);
+                alert(`例外エラーが発生しました: ${error.message}`);
+            }
+        }
+
+
+
+        //データをC#に渡しデータベースの処理を行う---------------------------------------------------------------------------------------------------------------------------------------
+        function submitData() {
+            if (selectedDates.length === 0) {
+                alert("日付が選択されていません！");
+                return;
+            }
+            const isAllAnswer = event_ans.some(item => item.answer === null);//some一つでも条件に当てはまるやつがあるなら
+            if (isAllAnswer) {
+                alert("イベントに未回答があります");
+                return;
+            }
+
+
+
+
+            const bikouText = document.getElementById("Text-message").value;
+            const sortedDates = [...selectedDates].sort((a, b) => a.date.localeCompare(b.date));
+            const calendData = calendar.getDate();
+            const calYear = calendData.getFullYear();
+            const calMonth = calendData.getMonth() + 1;
+
+            sortedDates.forEach(element => {
+                console.log(element.date),
+                    console.log(element.mode)
+            });//実験用
+
+            // 💡 C#のModel（ShiftSubmission）の形に合わせたデータ（オブジェクト）を作成します
+            const sendData = {
+                name: userName,    // C#の Name にマッピングされます
+                dates: sortedDates, // C#の Dates にマッピングされます
+                memo: bikouText,
+                year: calYear,
+                month: calMonth,
+                id: lineid,
+                answer: event_ans
+            };
+            console.log(sendData);
+
+
+            // ⭕ C#のAPIへ送信
+            fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',//送る先にJSON形式だと教えるため
+                    'ngrok-skip-browser-warning': 'true'
+                },
+
+                body: JSON.stringify(sendData) // 💡 さっき作った sendData をJSON文字列にして送る！
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('通信エラーが発生しました。');
+                })
+                .then(data => {
+                    // C#側から return Ok(new { message = "..." }) で返ってきた文字を表示
+                    // alert(data.message);
+
+                    // LINEの中で開いている場合は、送信後に自動でトーク画面を閉じる
+                    if (liff.isInClient()) {
+                        // ❹ 【修正】LINEに送る文字を「日付(スタンプ)」の形に変換する
+                        const formattedDatesForLine = sortedDates.map(item => `${item.date} (${item.mode})`).join("\n");
+
+                        liff.sendMessages([{
+                            type: 'text',
+                            text: `【シフト希望】\n氏名: ${userName}\n${formattedDatesForLine}\n上記で申請します。`
+                        }]).then(() => { liff.closeWindow(); });
+                    }
+                })
+                .catch(error => {
+                    console.error('エラー:', error);
+                    alert('送信に失敗しました。');
+                });
+        }
+
+    </script>
+</body>
+
+</html>

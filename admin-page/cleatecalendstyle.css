@@ -1,0 +1,126 @@
+/* シフト作成（content-build）の中にある h2 を「青色」にする */
+.content-build h2 {
+    color: blue;
+    border-bottom: 2px solid blue;
+    text-align: center;
+    /* 下線もつけて分かりやすく */
+}
+
+.content-build h3 {
+    color: rgb(60, 218, 11);
+}
+
+.calendar-container {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+#calendar {
+    flex: 7;
+    margin-bottom: 20px;
+}
+
+.event-settings {
+    display: flex;
+    align-items: center;
+    /* 子供の要素を上下の中央に揃える */
+
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+
+}
+
+.event-settings::before {
+    content: '';
+    width: 120px;
+    /* 💡 右側のボタンの横幅と同じ数値に合わせる */
+}
+
+.event-settings h4 {
+    font-size: 30px;
+    color: rgb(32, 164, 205);
+    flex: 1;
+    /* 余った中央エリアをめいっぱい広げる */
+    text-align: center;
+    /* 文字を中央揃えにする */
+    margin: 0;
+}
+
+#event-settings-button {
+    width: 140px;
+    /* 横幅（120px〜160pxくらいが標準的） */
+    height: 40px;
+    /* 高さ（36px〜44pxくらいが押しやすい） */
+
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.modeal-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-content h5 {
+    font-size: 10px;
+    flex: 1;
+    text-align: center;
+    margin: 0
+}
+
+dialog {
+    border: 2px solid #F00000;
+    padding: 10px;
+    width: 50%;
+}
+
+#modal-button {
+    width: 100px;
+    height: 20px;
+}
+
+#event-list {
+    flex: 3;
+}
+
+.event-list-mein {
+    border: solid 1px #006fe6;
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+}
+
+.event-info h3 {
+    margin: 0 0 5px 0;
+    /* 下（日付との間）に少し余白をつける */
+    font-size: 18px;
+}
+
+.event-info .event-day {
+    margin: 0;
+    font-size: 14px;
+    color: #666666;
+    /* 日付の文字色を少し落ち着かせる */
+}
+
+.event-ded-button {
+    width: 140px;
+    height: 40px;
+}

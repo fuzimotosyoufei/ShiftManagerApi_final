@@ -1,0 +1,403 @@
+/* --------------------------------------------------
+ * 1. スタッフ一覧の親リスト（<ul> や <ol>）
+ * -------------------------------------------------- */
+#staff-list {
+    list-style: none;
+    /* 【必須】デフォルトの黒ポチ（・）を消す */
+    padding: 0;
+    /* 【任意】<ul>のデフォルト内側余白をリセット */
+    display: flex;
+    /* 【任意】子要素を縦並びレイアウトにする */
+    flex-direction: column;
+    /* 【任意】flexの配置方向を「上から下」に設定 */
+    gap: 12px;
+    /* 【任意】カード同士の上下のすき間（12px） */
+}
+
+/* --------------------------------------------------
+ * 2. 各スタッフのカード（<li>）
+ * -------------------------------------------------- */
+.staff-card {
+    border: 1px solid #e2e8f0;
+    /* 【任意】カードの薄い外枠（枠線） */
+    border-radius: 8px;
+    /* 【任意】枠線の四隅を丸くする */
+    padding: 14px 18px;
+    /* 【任意】カード内部の余白（上下14px、左右18px） */
+    background-color: #ffffff;
+    /* 【任意】背景色を白に設定 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* 【任意】カードの下にうっすら影をつける */
+}
+
+/* --------------------------------------------------
+ * 3. スタッフのヘッダー部分（ID・名前・区分が入る枠）
+ * -------------------------------------------------- */
+.staff-header {
+    display: flex;
+    /* 【必須】ID・名前・区分を「横並び」にする */
+    align-items: center;
+    /* 【任意】横並びにした要素の上下中央を揃える */
+    gap: 12px;
+    /* 【任意】名前やバッジ同士の横のすき間（12px） */
+    margin-bottom: 8px;
+    /* 【任意】下の職種エリアとのすき間（8px） */
+}
+
+/* --------------------------------------------------
+ * 4. スタッフの名前テキスト
+ * -------------------------------------------------- */
+.staff-name {
+    font-size: 1.1rem;
+    /* 【任意】文字サイズを少し大きく（標準の1.1倍） */
+}
+
+/* --------------------------------------------------
+ * 5. 区分バッジ（アルバイト・正社員など）
+ * -------------------------------------------------- */
+.role-badge {
+    background-color: #edf2f7;
+    /* 【任意】バッジの背景色（薄いグレー） */
+    color: #4a5568;
+    /* 【任意】文字色（濃いグレー） */
+    padding: 2px 8px;
+    /* 【任意】バッジの内側の余白（上下2px、左右8px） */
+    border-radius: 4px;
+    /* 【任意】バッジのカドを少し丸くする */
+    font-size: 0.85rem;
+    /* 【任意】文字サイズを少し小さくする */
+}
+
+/* --------------------------------------------------
+ * 6. 職種（job）のラッパー枠
+ * -------------------------------------------------- */
+.staff-jobs {
+    display: flex;
+    /* 【必須】複数の職種バッジを「横並び」にする */
+    align-items: center;
+    /* 【任意】上下中央揃え */
+    flex-wrap: wrap;
+    /* 【必須】職種が多くて横幅を超えたら自動で折り返す */
+    gap: 6px;
+    /* 【任意】職種バッジ同士のすき間（6px） */
+    margin-top: 4px;
+    /* 【任意】上の要素とのすき間（4px） */
+}
+
+/* --------------------------------------------------
+ * 7. 職種バッジ（ホール・キッチンなど）
+ * -------------------------------------------------- */
+.job-badge {
+    background-color: #ebf8ff;
+    /* 【任意】バッジの背景色（薄い青） */
+    color: #2b6cb0;
+    /* 【任意】文字色（濃い青） */
+    border: 1px solid #bee3f8;
+    /* 【任意】バッジの外枠線（少し濃い青） */
+    padding: 3px 10px;
+    /* 【任意】バッジの内側余白（上下3px、左右10px） */
+    border-radius: 12px;
+    /* 【任意】バッジのカドを完全に丸くしてカプセル型にする */
+    font-size: 0.85rem;
+    /* 【任意】文字サイズを少し小さくする */
+    font-weight: bold;
+    /* 【任意】文字を太字にする */
+}
+
+/* --------------------------------------------------
+ * 8. 職種ラベル（「担当職種：」のテキスト）
+ * -------------------------------------------------- */
+.job-label {
+    font-size: 0.85rem;
+    color: #718096;
+}
+
+/* --------------------------------------------------
+ * 9. 編集ボタン（クリック時のトグル用）
+ * -------------------------------------------------- */
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+    align-items: center;
+    width: 100%;
+}
+
+#staff-Edit-button.editing {
+    background-color: #e53e3e;
+    color: white;
+    width: 120px;
+    height: 40px;
+}
+
+#staff-Edit-button {
+    background-color: #aea9a9;
+    color: white;
+    width: 120px;
+    height: 40px;
+}
+
+#staff-Insert-button {
+    background-color: #3182ce;
+    color: white;
+    width: 100px;
+    height: 40px;
+}
+
+/* --------------------------------------------------
+ * 10. 編集フォーム内部レイアウト
+ * -------------------------------------------------- */
+.edit-staff-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-row {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 10px;
+}
+
+.edit-row-jobs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn-staff-delete {
+    background-color: #e72b06;
+    text-align: center;
+    position: absolute;
+    right: 0;
+}
+
+.edit-input-name {
+    padding: 4px 8px;
+    font-size: 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+}
+
+.edit-select-role,
+.add-job-select {
+    padding: 4px 8px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.edit-job-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* --------------------------------------------------
+ * 11. 編集時の職種バッジ（×ボタン付き）
+ * -------------------------------------------------- */
+.edit-job-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ebf8ff;
+    color: #2b6cb0;
+    border: 1px solid #bee3f8;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* 💡 ×ボタン（即時削除用） */
+.btn-delete-job {
+    background: transparent;
+    border: none;
+    color: #e53e3e;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 0 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-delete-job:hover {
+    background-color: #fed7d7;
+    color: #9b2c2c;
+}
+
+/* --------------------------------------------------
+ * 12. 職種追加エリア
+ * -------------------------------------------------- */
+.add-job-area {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.btn-add-job {
+    padding: 4px 10px;
+    background-color: #3182ce;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.2s;
+}
+
+.btn-add-job:hover {
+    background-color: #2b6cb0;
+}
+
+.modal-staff-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-staff-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+#modal-staff-button {
+    width: 100px;
+    height: 40px;
+}
+
+.modal-staff-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-staff-content h5 {
+    font-size: 10px;
+    flex: 1;
+    text-align: center;
+    margin: 0
+}
+
+.tab-button {
+    display: flex;
+    gap: 10px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    /* アクティブな時だけ表示 */
+    display: block;
+}
+
+.tab-btn.active {
+    background-color: #3182ce;
+    color: white;
+}
+
+.tab-buttons label {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    /* 下の線を消してカードっぽくする */
+    border-radius: 6px 6px 0 0;
+    /* 上の角だけ丸くする */
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* .tab-buttons input[type="radio"]:checked+label {
+    background-color: #007bff;
+    /* 選択中の背景色（青） */
+/* color: #fff; */
+/* 文字色（白） */
+/* border-color: #007bff; */
+/* }  */
+.staff-Application-container {
+    border: 2px solid #ffffff;
+    /* border-radius: 8px; */
+
+    width: 100%;
+    box-sizing: border-box
+        /* ぼーたボックスで100%よりでかくならずいい感じになる */
+}
+
+.staff-Application-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* .staff-Application-row {
+    
+    display: flex;
+    align-items: center;
+} */
+
+
+
+#staff-application-list li {
+    border: solid 1px #006fe6;
+    margin-bottom: 20px;
+    padding: 12 px 15px;
+    backgound-color: #b0d6d6;
+}
+
+/* 職種マスター削除ボタン (トップ画面) */
+.btn-job-master {
+    background-color: #718096;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.btn-job-master:hover {
+    background-color: #4a5568;
+}
+
+#job-Master-button {
+    /* display: none; */
+}
+
+/* モーダル内 削除確定ボタン */
+.btn-delete-master-job {
+    background-color: #e53e3e;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    margin-left: auto;
+
+}
+
+.btn-delete-master-job:hover {
+    background-color: #c53030;
+}
+
+.btn-delete-master-job.editing {
+    display: inline-block;
+
+}

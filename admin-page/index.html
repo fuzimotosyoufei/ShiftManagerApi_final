@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シフト管理画面</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cleatecalendstyle.css">
+    <link rel="stylesheet" href="staff.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <div class="plbutton-main">
+            <button class="plbutton-button" onclick="switchPage('check')">📥 希望一覧 (Check)</button>
+            <button class="plbutton-button" onclick="switchPage('build')">🛠️ シフト作成 (Build)</button>
+            <button class="plbutton-button" onclick="switchPage('staff')">👤 スタッフ管理 (staff)</button>
+        </div>
+
+        <div class="main-content">
+
+            <div id="page-check" class="content-check">
+                <button class="btn-clear" onclick="alert('C#のデータ削除機能は後ほど実装します！')">データを全削除</button>
+
+                <!-- <table id="shift_create" class="design01">
+                    <tr id="shift_name">
+                        <th>名前</th>
+
+                    </tr>
+                </table> -->
+
+                <table class="design01">
+                    <!-- 見出し用（日付や「名前」、イベント名が入る場所） -->
+                    <thead id="shift_name"></thead>
+
+                    <!-- スタッフデータ行が入る場所 -->
+                    <tbody id="shift_create"></tbody>
+                </table>
+
+                <h1>📥 受信したシフト希望一覧（管理画面）</h1>
+                <div id="admin-history-container"></div>
+            </div>
+
+            <div id="page-build" class="content-build">
+                <h2>🛠️ シフト作成・チェック用画面</h2>
+                <div class='calendar-container'>
+                    <div id='calendar'></div>
+                    <!-- <p style="text-align: center; color: #666;">ここに将来、カレンダーや組み立て機能を実装します！</p> -->
+                    <div class="event-settings">
+                        <h4>現在のイベント</h4>
+                        <button type="button" id="event-settings-button">イベント追加</button>
+
+                        <dialog id="my-modal">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5>タイトルとか</h5>
+                                    <button type="button" id="modal-button">
+                                        閉じる
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>イベント名入力:
+                                        <input type="text" name="name" id="modal-body-text"></input>
+                                    </p>
+                                    <p><input type="button" value="決定" id="modal-body-button"></p>
+                                    <label for="event-date">実施日：</label>
+                                    <input type="date" id="event-calend" name="event-date">
+                                </div>
+                            </div>
+                        </dialog>
+
+
+                    </div>
+                    <div id="event-list">
+
+                        <div id="event-list-mein"></div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div id="page-staff" class="content-staff">
+                <div class="tab-buttons">
+                </div>
+                <div class="tab-button">
+                    <button type="button" class="tab-btn active" onclick="switchTab('content-tab1', this)">スタッフ管理</button>
+                    <button type="button" class="tab-btn" onclick="switchTab('content-tab2', this)">スタッフ申請・登録管理</button>
+                </div>
+                <div class="tab-content active" id="content-tab1">
+                    <h2>👤 スタッフ管理</h2>
+                    <div class="button-container">
+                        <button type="button" id="staff-Edit-button">スタッフ編集
+                        </button>
+                        <button type="button" id="job-Master-button" onclick="OpenJobDelete()" class="btn-job-master">🏷️ 職種削除</button>
+                        <button type="button" id="staff-Insert-button" onclick=" OpenStaff()">スタッフ追加
+                        </button>
+              
+                    </div>
+
+                    <dialog id="my-staff-modal">
+                        <div class="modal-staff-content">
+                            <div class="modal-staff-header">
+                                <h5>タイトルとか</h5>
+                                <button type="button" id="modal-staff-button" onclick="CloseStaff()">
+                                    閉じる
+                                </button>
+                            </div>
+                            <div class="modal-staff-body">
+                                <p>名前入力:
+                                    <input type="text" name="name" id="modal-body-name-text"></input>
+                                </p>
+                                <p>役割選択:
+                                    <select id="modal-body-role-select">
+                                        <option value="" disabled selected>選択してください</option>
+                                    </select>
+                                </p>
+                                <p>役職選択:
+                                    <select id="modal-body-job-select">
+                                        <option value="" disabled selected>選択してください</option>
+                                    </select>
+                                </p>
+                                <p><input type="button" value="決定" id="modal-body-button" onclick="InsertStaff()"></p>
+
+                            </div>
+                        </div>
+                    </dialog>
+                    <ul id="staff-list"></ul>
+                </div>
+
+                <dialog>
+
+                </dialog>
+                <dialog id="my-job-modal">
+                    <div class="modal-staff-content">
+                        <div class="modal-staff-header">
+                            <h5>🏷️ 職種マスター削除</h5>
+                            <button type="button" onclick="CloseJobDelete()">閉じる</button>
+                        </div>
+                        <div class="modal-staff-body">
+                            <div>
+                                <p style="font-weight: bold; margin-bottom: 8px;">削除する職種を選択してください：</p>
+                                <select id="delete-master-job-select" style="padding: 6px; font-size: 0.95rem; margin-right: 8px;">
+                                    <option value="" disabled selected>選択してください...</option>
+                                </select>
+                                <button type="button" class="btn-delete-master-job" onclick="deleteJobMasterFromModal()">削除</button>
+                            </div>
+                        </div>
+                    </div>
+                </dialog>
+
+                <div class="tab-content" id="content-tab2">
+                    <p>👤 スタッフ申請・登録管理（デモ版）</p>
+                    <div class="staff-Application-container">
+                        <div class="staff-Application-body">
+                            <h3>スタッフ申請・登録管理</h3>
+                            <ul id="staff-application-list" style="padding: 0;"></ul>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="app.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+            <script src="cleatecalend.js"></script>
+            <script src="staff.js"></script>
+
+</body>
+
+</html>
