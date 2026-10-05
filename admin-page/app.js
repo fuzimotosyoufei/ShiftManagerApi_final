@@ -213,7 +213,7 @@ function CreateCalend(date, ymdata) {
                 select.setAttribute('data-staff-id', staff.id);
                 select.setAttribute('data-date', dateStr);
 
-                const options = ["", "日勤", "遅番", "休み"];
+                const options = ["", "日勤","早番", "遅番","夜勤", "休み"];
                 options.forEach(opt => {
                     const option = document.createElement('option');
                     option.value = opt;
