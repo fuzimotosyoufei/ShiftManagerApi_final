@@ -1,4 +1,4 @@
-let JOB_MASTER = [];
+﻿let JOB_MASTER = [];
 const ROLE_MASTER = ['正社員', '準社員', 'パート'];
 
 // --------------------------------------------------
@@ -28,7 +28,7 @@ function formatStaffData(rawData) {
 }
 
 async function fetchJobMaster() {
-    fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/joblist',{
+    fetch('https://residual-excitable-follicle.ngrok-free.dev/api/staff/joblist',{
         method: 'GET',
             headers: {
 
@@ -55,7 +55,7 @@ function showStaffList() {
     const listEl = document.getElementById('staff-list');
     if (!listEl) return;
     listEl.innerHTML = '';
-    fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/stafflist', {
+    fetch('https://residual-excitable-follicle.ngrok-free.dev/api/staff/stafflist', {
         method: 'GET',
         headers: {
 
@@ -163,7 +163,7 @@ function deleteStaff(staffId, staffName){
     const result = window.confirm(`${staffName}'さんを本当に削除しますか？`);
 
     if (result) {
-        fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/deletestaff?staffId=${staffId}`, {
+        fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/deletestaff?staffId=${staffId}`, {
             method: 'POST',
             headers: {
                 'ngrok-skip-browser-warning': 'true'
@@ -199,7 +199,7 @@ async function addchangename(staffId, buttonEl) {
 
     // 💡 try...catch でエラーハンドリング
     try {
-        const response = await fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/namechangename?staffId=${staffId}&newName=${encodeURIComponent(newName)}`, {
+        const response = await fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/namechangename?staffId=${staffId}&newName=${encodeURIComponent(newName)}`, {
             method: 'GET',
             headers: {
                 'ngrok-skip-browser-warning': 'true'
@@ -247,7 +247,7 @@ async function addJobToStaff(staffId) {
 
 
         // 2. API（POST）通信
-        fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/injob?staffId=${staffId}&jobname=${encodeURIComponent(selectedJob)}`, {
+        fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/injob?staffId=${staffId}&jobname=${encodeURIComponent(selectedJob)}`, {
             method: 'POST',
             headers: {
                 'ngrok-skip-browser-warning': 'true'
@@ -296,7 +296,7 @@ async function InJob(staffId) {//新しい職種を追加する処理
         const trimmedJobName = newJobName.trim();
 
         try {
-            const response = await fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/injobmaster?jobname=${encodeURIComponent(trimmedJobName)}`, {
+            const response = await fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/injobmaster?jobname=${encodeURIComponent(trimmedJobName)}`, {
                 method: 'GET',
                 headers: { 'ngrok-skip-browser-warning': 'true' }
             });
@@ -318,7 +318,7 @@ async function InJob(staffId) {//新しい職種を追加する処理
 }
 
 function updateRole(staffId,rolName){
-    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/updaterole?staffId=${staffId}&rolename=${encodeURIComponent(rolName)}`, {
+    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/updaterole?staffId=${staffId}&rolename=${encodeURIComponent(rolName)}`, {
         method: 'GET',
         headers: {
             'ngrok-skip-browser-warning': 'true'
@@ -340,7 +340,7 @@ function updateRole(staffId,rolName){
 function deleteJobFromStaff(staffId, jobName, buttonEl) {//buttonELの認識は押されたバツから一番近い枠削除するために使う職種の削除処理
     if (!confirm(`「${jobName}」を削除しますか？`)) return;
 
-    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/deljob?staffId=${staffId}&jobname=${encodeURIComponent(jobName)}`, {
+    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/deljob?staffId=${staffId}&jobname=${encodeURIComponent(jobName)}`, {
         method: 'GET',
         headers: {
             'ngrok-skip-browser-warning': 'true'
@@ -392,7 +392,7 @@ function InsertStaff() {
         return;
     }
     
-    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/inManualstaff?name=${encodeURIComponent(name)}&line_id=${"null"}&role=${encodeURIComponent(role)}&job=${encodeURIComponent(job)}`, {
+    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/inManualstaff?name=${encodeURIComponent(name)}&line_id=${"null"}&role=${encodeURIComponent(role)}&job=${encodeURIComponent(job)}`, {
         method: 'GET',
         headers: {
             'ngrok-skip-browser-warning': 'true'
@@ -460,7 +460,7 @@ async function deleteJobMasterFromModal() {
     }
 
     try {
-        const response = await fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/deljobmaster?jobname=${encodeURIComponent(jobName)}`, {
+        const response = await fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/deljobmaster?jobname=${encodeURIComponent(jobName)}`, {
             method: 'GET',
             headers: {
                 'ngrok-skip-browser-warning': 'true'
@@ -514,7 +514,7 @@ function switchTab(tabId, button) {
     }
 }
 function StaffApplications() {
-   fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/staffapplicationlist', {
+   fetch('https://residual-excitable-follicle.ngrok-free.dev/api/staff/staffapplicationlist', {
        method: 'GET',
        headers: {
            'ngrok-skip-browser-warning': 'true'
@@ -622,7 +622,7 @@ function staffApplicationsConsent(staffId, lineId, name, status, count) {
             return;
         }else{
             console.log(`スタッフID: ${staffId} ${status}の申請を承諾（追加職種: ${selectedJob}）${selectedRole}`);
-            fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/inManualstaff?name=${encodeURIComponent(name)}&line_id=${encodeURIComponent(lineId)}&role=${encodeURIComponent(selectedRole)}&job=${encodeURIComponent(selectedJob)}`, {
+            fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/inManualstaff?name=${encodeURIComponent(name)}&line_id=${encodeURIComponent(lineId)}&role=${encodeURIComponent(selectedRole)}&job=${encodeURIComponent(selectedJob)}`, {
                 method: 'GET',
                 headers: {
                     'ngrok-skip-browser-warning': 'true'
@@ -650,7 +650,7 @@ function staffApplicationsConsent(staffId, lineId, name, status, count) {
     }
 }
 function staffApplicationsCheck(staffId, count) {
-    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/staff/staffapplicationsCheck?id=${encodeURIComponent(staffId)}&count=${encodeURIComponent(count)}`, {
+    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/staff/staffapplicationsCheck?id=${encodeURIComponent(staffId)}&count=${encodeURIComponent(count)}`, {
         method: 'GET',
         headers: {
             'ngrok-skip-browser-warning': 'true'

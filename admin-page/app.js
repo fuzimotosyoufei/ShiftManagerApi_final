@@ -1,4 +1,4 @@
-const staffShifts = [
+﻿const staffShifts = [
     {
         id: 1,
         name: "藤本",
@@ -35,7 +35,7 @@ const staffShifts = [
 ];
 
 function CalendarYearAndMonth() {
-    fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/admin/YearMonth', {
+    fetch('https://residual-excitable-follicle.ngrok-free.dev/api/admin/YearMonth', {
         headers: {
             'ngrok-skip-browser-warning': 'true'
         }
@@ -53,7 +53,7 @@ function CalendarYearAndMonth() {
         })
 }
 function CalendarData(ymdata) {
-    fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/admin/calendarnau', {
+    fetch('https://residual-excitable-follicle.ngrok-free.dev/api/admin/calendarnau', {
         headers: {
             'ngrok-skip-browser-warning': 'true'
         }
@@ -75,7 +75,7 @@ function CalendarData(ymdata) {
 }
 
 // function CalendarEvetn(){
-//     fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/admin/Event',{
+//     fetch('https://residual-excitable-follicle.ngrok-free.dev/api/admin/Event',{
 //         headers: {
 //             'ngrok-skip-browser-warning' : 'true'
 //         }
@@ -228,7 +228,7 @@ function CreateCalend(date, ymdata) {
                     console.log(`選択された値: ${dateStr}`);
                     console.log(`スタッフID: ${staff.id}, 日付: ${date}, 選択された値: ${selectedValue}`);
                     // ここでfetchを使ってサーバーに送信する処理を追加できます。
-                    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/admin/staffinshift?GetId=${staffId}&dateStr=${date}&selectedValue=${selectedValue}&year=${ymdata.year}&month=${ymdata.month}`, {
+                    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/admin/staffinshift?GetId=${staffId}&dateStr=${date}&selectedValue=${selectedValue}&year=${ymdata.year}&month=${ymdata.month}`, {
                         method: 'POST',
                         headers: {
                             'ngrok-skip-browser-warning': 'true'
@@ -345,7 +345,7 @@ channel.onmessage = (calendar) => {
 
 
 function loadShifts() {
-    fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/shift', {
+    fetch('https://residual-excitable-follicle.ngrok-free.dev/api/shift', {
         method: 'GET',
         headers: {
 
@@ -430,7 +430,7 @@ function loadShifts() {
 
 
 // function CalendarData() {
-//     fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/admin/calendarnau', {
+//     fetch('https://residual-excitable-follicle.ngrok-free.dev/api/admin/calendarnau', {
 //         headers: {
 //             'ngrok-skip-browser-warning': 'true'
 //         }

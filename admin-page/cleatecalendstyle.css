@@ -1,4 +1,4 @@
-/* シフト作成（content-build）の中にある h2 を「青色」にする */
+﻿/* シフト作成（content-build）の中にある h2 を「青色」にする */
 .content-build h2 {
     color: blue;
     border-bottom: 2px solid blue;

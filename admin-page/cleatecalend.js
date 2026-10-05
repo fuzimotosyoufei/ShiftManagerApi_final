@@ -1,4 +1,4 @@
-let currentPeriodId = null;
+﻿let currentPeriodId = null;
 let calendar = null;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 const calendarEl = document.getElementById('calendar')
 
 function StartCalendar() {
-    fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/calendar', { headers: { 'ngrok-skip-browser-warning': 'true' } })
+    fetch('https://residual-excitable-follicle.ngrok-free.dev/api/Build/calendar', { headers: { 'ngrok-skip-browser-warning': 'true' } })
         .then(response => {
             if (!response.ok) {
                 throw new Error('データの取得に失敗したよ');
@@ -55,7 +55,7 @@ function InitCalendar(start, end) {
                         } else if (button.innerText === 'カレンダー配信中') {
                             alert('今配信中');
 
-                            // fetch('https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/AgainCalendar')
+                            // fetch('https://residual-excitable-follicle.ngrok-free.dev/api/Build/AgainCalendar')
 
                         }
                     }
@@ -121,7 +121,7 @@ function InitCalendar(start, end) {
             const carendYear = carendDate.getFullYear();
             const carendMonth = carendDate.getMonth() + 1;
             const inputContent = "実験";
-            fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/bullidcalender?Getyear=${carendYear}&Getmonth=${carendMonth}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+            fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/Build/bullidcalender?Getyear=${carendYear}&Getmonth=${carendMonth}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('データの取得に失敗したよ');
@@ -130,7 +130,7 @@ function InitCalendar(start, end) {
                 })
                 .then(data => {
 
-                    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/modalbodyBtn?GetId=${data.id}&GetDay=${Day}&GetText=${inputText}&GetContent=${inputContent}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+                    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/Build/modalbodyBtn?GetId=${data.id}&GetDay=${Day}&GetText=${inputText}&GetContent=${inputContent}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('データの取得に失敗したよ');
@@ -173,7 +173,7 @@ function InputEventCalend() {
 
 
 function GetCalendar(Year, Month) {//これはカレンダーを矢印で移動させたときに画面に表示するやつ
-    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/bullidcalender?Getyear=${Year}&Getmonth=${Month}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/Build/bullidcalender?Getyear=${Year}&Getmonth=${Month}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
         .then(response => {
             if (!response.ok) {
                 throw new Error('データの取得に失敗したよ');
@@ -220,7 +220,7 @@ function GetCalendar(Year, Month) {//これはカレンダーを矢印で移動�
 }
 
 function GetEvent(Id) {//カレンダーのidからイベントを探す
-    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/event?GetId=${Id}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/Build/event?GetId=${Id}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
         .then(response => {
             if (!response.ok) {
                 // console.log(response);
@@ -257,7 +257,7 @@ if (eventList) {
         if (e.target.classList.contains('event-ded-button')) {
             const eventId = e.target.getAttribute('data-id');
             console.log("削除対象のID:", eventId);
-            fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/Deleteevent?GetId=${eventId}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+            fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/Build/Deleteevent?GetId=${eventId}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`エラー:${response.status}`);
@@ -273,7 +273,7 @@ if (eventList) {
 }
 
 function CreatePeriods(Year, Month) {//カレンダーのidからイベントを探す
-    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/CreatePeriods?GetYear=${Year}&GetMonth=${Month}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/Build/CreatePeriods?GetYear=${Year}&GetMonth=${Month}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`エラー:${response.status}`);
@@ -297,7 +297,7 @@ function CreatePeriods(Year, Month) {//カレンダーのidからイベントを
 }
 
 function UpdateStatus(id) {
-    fetch(`https://overplay-patriarch-daffodil.ngrok-free.dev/api/Build/UpdateStatus?GetId=${id}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
+    fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/Build/UpdateStatus?GetId=${id}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`エラー:${response.status}`);
