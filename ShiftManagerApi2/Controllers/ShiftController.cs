@@ -55,7 +55,7 @@ namespace ShiftManagerApi2.Controllers
                     else
                     {
                         Console.WriteLine("実行されたよ1（データがないことを確認した！）");
-                        //int newReqsId = InsertReqsId(staff_id ?? 0, data.Memo, data.Year, data.Month, data.Dates, data.Answer) ?? 0;
+                        int newReqsId = InsertReqsId(staff_id ?? 0, data.Memo, data.Year, data.Month, data.Dates, data.Answer) ?? 0;
                         //a = "新規登録完了";
                     }
 
@@ -176,6 +176,7 @@ namespace ShiftManagerApi2.Controllers
         private int? InsertReqsId(int staff_id, string memo, int year, int month, List<ShiftDateItem> dates, List<EventAnswerItem> answers)//新しいshift_reqsを追加する処理と新しいshift_req_data追加する処理
 
         {
+            Console.WriteLine("実行されたよ2（データがないことを確認した！）");
             using (var conn = _db.CreateConnection())
             {
                 string insert_sql = "INSERT INTO shift_reqs (staff_id,periods_id,memo) SELECT @staff_id, id, @memo FROM shift_periods WHERE year =@year AND month = @month RETURNING id";
@@ -353,9 +354,11 @@ namespace ShiftManagerApi2.Controllers
                     var result = staffid_cmd.ExecuteScalar();
                     if (result == null || result == DBNull.Value)
                     {
+                        Console.WriteLine(result);
                         return Ok(null);
                     }
                     int staffId = Convert.ToInt32(result);//reqs_idがあった場合はそのIDを返す
+                    Console.WriteLine(staffId);
                     return Ok(staffId);
                 }
             }
