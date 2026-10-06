@@ -525,7 +525,8 @@ function StaffApplications() {
            return response.json();
        })
        .then(data => {
-           if (data.length > 0) alert(data[0].id);
+           if (data.length > 0) 
+               //alert(data[0].id);
            StaffApplicationsList(data);
     
            // DB削除成功後に画面からバッジを取り除く
