@@ -197,7 +197,7 @@ function GetCalendar(Year, Month) {//これはカレンダーを矢印で移動�
                 const nullevent = [
                     { name: '未作成' }
                 ];
-                CreateEvent(nullevent,Month);
+                CreateEvent(nullevent);
             } else {
                 currentPeriodId = data.id;//どのカレンダーかを区別するための番号
                 if (button) {
@@ -214,12 +214,12 @@ function GetCalendar(Year, Month) {//これはカレンダーを矢印で移動�
                 if (eventAddBtn) {
                     eventAddBtn.disabled = false;
                 }
-                GetEvent(data.id, Month);
+                GetEvent(data.id);
             }
         })
 }
 
-function GetEvent(Id, Month) {//カレンダーのidからイベントを探す
+function GetEvent(Id) {//カレンダーのidからイベントを探す
     fetch(`https://residual-excitable-follicle.ngrok-free.dev/api/Build/event?GetId=${Id}`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
         .then(response => {
             if (!response.ok) {
@@ -229,11 +229,11 @@ function GetEvent(Id, Month) {//カレンダーのidからイベントを探す
             return response.json(); // 正常なときだけここにたどり着く
         })
         .then(date => {
-            CreateEvent(date, Month)
+            CreateEvent(date)
         })
 }
 
-function CreateEvent(Event, Month) {//イベントの枠を作成
+function CreateEvent(Event) {//イベントの枠を作成
     const eventList = document.getElementById('event-list')
     eventList.innerHTML = '';//一度中を空にする
     Event.forEach(item => {
@@ -241,7 +241,7 @@ function CreateEvent(Event, Month) {//イベントの枠を作成
         <div class="event-list-mein">
             <div class="event-info">
                 <h3>${item.name}</h3>
-                <p class="event-day">${Month}月${item.day}日</p>
+                <p class="event-day">${item.day}日</p>
             </div>
             <button type="button" class="event-ded-button" data-id="${item.id}">削除ボタン</button>
 
