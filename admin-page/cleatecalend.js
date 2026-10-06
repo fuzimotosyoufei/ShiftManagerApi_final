@@ -241,7 +241,7 @@ function CreateEvent(Event) {//イベントの枠を作成
         <div class="event-list-mein">
             <div class="event-info">
                 <h3>${item.name}</h3>
-                <p class="event-day">${item.day}</p>
+                <p class="event-day">${item.day}日</p>
             </div>
             <button type="button" class="event-ded-button" data-id="${item.id}">削除ボタン</button>
 
